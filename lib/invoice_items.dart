@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:invoice_app/page/pdf_page.dart';
+
 
 class InvoiceItems extends StatelessWidget {
   const InvoiceItems({super.key});
@@ -80,11 +82,11 @@ class InvoiceItems extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text("Close"),
+                                  child: const Text("Close"),
                                 ),
                                 TextButton(
                                   onPressed: () {},
-                                  child: Text("Save"),
+                                  child: const Text("Save"),
                                 ),
                               ],
                             ),
@@ -122,8 +124,36 @@ class InvoiceItems extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+           ),
           ),
+           Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>const PdfPage()),
+                  );
+                },
+                child: Container(
+                  height: 45,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    "NEXT",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
