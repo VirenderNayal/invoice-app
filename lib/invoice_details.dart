@@ -10,7 +10,7 @@ class InvoiceDetails extends StatefulWidget {
 }
 
 class _InvoiceDetailsState extends State<InvoiceDetails> {
-  final TextEditingController _controller = new TextEditingController();
+  final TextEditingController _controller =  TextEditingController();
 
   String currDate = DateFormat('yMd').format(DateTime.now());
   @override

@@ -78,29 +78,29 @@ class _LoginSignupState extends State<LoginSignup> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(18.0),
+              padding: const EdgeInsets.all(18.0),
               child: Text(
                 isLogin ? "Log in" : "Sign Up",
-                style: TextStyle(
+                style:const TextStyle(
                   fontSize: 32,
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
                 controller: _controllerEmail,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Email',
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              padding:const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
                 controller: _controllerPassword,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Password',
                 ),
@@ -108,11 +108,11 @@ class _LoginSignupState extends State<LoginSignup> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  isLogin ? Text("Forgot Password") : Container(),
+                  isLogin ? const Text("Forgot Password") : Container(),
                   InkWell(
                     onTap: () {
                       setState(() {
