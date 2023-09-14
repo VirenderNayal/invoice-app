@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:invoice_app/invoice_data.dart';
+import 'package:invoice_app/pdf_gen.dart';
+// import 'package:path_provider/path_provider.dart';
+// invoice_items.dart
+
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';  // Import the pdf_flutter package
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class InvoiceItems extends StatefulWidget {
   const InvoiceItems({super.key, required this.invData});
@@ -12,6 +19,17 @@ class InvoiceItems extends StatefulWidget {
 class _InvoiceItemsState extends State<InvoiceItems> {
   final TextEditingController desc = TextEditingController();
   final TextEditingController amt = TextEditingController();
+  File? pdfFile; // Variable to store the generated PDF file
+
+  Future<void> generateAndSavePDF() async {
+    // Call the PDF generation function and store the generated file
+    pdfFile = await PDFGenerator.generatePDF(widget.invData.items);
+    
+    // Navigate to the PDF viewer page
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => PDFViewerPage(pdfFile: pdfFile!),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,8 +202,50 @@ class _InvoiceItemsState extends State<InvoiceItems> {
               },
             ),
           ),
+          ElevatedButton(
+            onPressed: generateAndSavePDF, // Call the PDF generation function
+            child:const Text('Generate PDF'),
+          ),
         ],
       ),
     );
   }
 }
+
+
+class PDFViewerPage extends StatelessWidget {
+  final File pdfFile;
+
+  PDFViewerPage({required this.pdfFile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PDF Viewer'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Navigate back to the previous screen (InvoiceItems)
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: FutureBuilder<PDFDocument>(
+        future: PDFDocument.fromFile(pdfFile),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error loading PDF'));
+          } else if (snapshot.hasData) {
+            return PDFViewer(document: snapshot.data!);
+          }
+          return Center(child: Text('No PDF available'));
+        },
+      ),
+    );
+  }
+}
+
+
