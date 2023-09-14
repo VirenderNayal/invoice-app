@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:invoice_app/invoice_data.dart';
 
-class InvoiceItems extends StatelessWidget {
-  const InvoiceItems({super.key});
+class InvoiceItems extends StatefulWidget {
+  const InvoiceItems({super.key, required this.invData});
+
+  final InvoiceData invData;
+  @override
+  State<InvoiceItems> createState() => _InvoiceItemsState();
+}
+
+class _InvoiceItemsState extends State<InvoiceItems> {
+  final TextEditingController desc = TextEditingController();
+  final TextEditingController amt = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> items = widget.invData.items;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
@@ -49,22 +60,24 @@ class InvoiceItems extends StatelessWidget {
                             padding: EdgeInsets.all(20.0),
                             child: Text("ITEM DETAILS"),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 10),
                             child: TextField(
-                              decoration: InputDecoration(
+                              controller: desc,
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: "DESCRIPTION",
                               ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 10),
                             child: TextField(
+                              controller: amt,
                               keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: "AMOUNT",
                               ),
@@ -78,12 +91,25 @@ class InvoiceItems extends StatelessWidget {
                               children: [
                                 TextButton(
                                   onPressed: () {
+                                    desc.text = "";
+                                    amt.text = "";
                                     Navigator.of(context).pop();
                                   },
                                   child: Text("Close"),
                                 ),
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    var newItem = Map<String, String>();
+                                    newItem[desc.text] = amt.text;
+
+                                    desc.text = "";
+                                    amt.text = "";
+
+                                    setState(() {
+                                      items.add(newItem);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
                                   child: Text("Save"),
                                 ),
                               ],
@@ -122,6 +148,40 @@ class InvoiceItems extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                var item = items[index].entries.toList();
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        (index + 1).toString(),
+                        style: const TextStyle(
+                          fontSize: 22,
+                        ),
+                      ),
+                      Text(
+                        item[0].key,
+                        style: const TextStyle(
+                          fontSize: 22,
+                        ),
+                      ),
+                      Text(
+                        item[0].value,
+                        style: const TextStyle(
+                          fontSize: 22,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         ],

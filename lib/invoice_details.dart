@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:invoice_app/invoice_data.dart';
 import 'package:invoice_app/invoice_items.dart';
 
 class InvoiceDetails extends StatefulWidget {
@@ -10,13 +11,22 @@ class InvoiceDetails extends StatefulWidget {
 }
 
 class _InvoiceDetailsState extends State<InvoiceDetails> {
-  final TextEditingController _controller = new TextEditingController();
+  final TextEditingController invoiceNumber = TextEditingController();
+  final TextEditingController invoiceDate = TextEditingController();
+  final TextEditingController billToName = TextEditingController();
+  final TextEditingController billToAddress = TextEditingController();
+  final TextEditingController billToCity = TextEditingController();
+  final TextEditingController billToPhone = TextEditingController();
+  final TextEditingController fromName = TextEditingController();
+  final TextEditingController fromAddress = TextEditingController();
+  final TextEditingController fromCity = TextEditingController();
+  final TextEditingController fromPhone = TextEditingController();
 
   String currDate = DateFormat('yMd').format(DateTime.now());
   @override
   void initState() {
     super.initState();
-    _controller.text = currDate;
+    invoiceDate.text = currDate;
   }
 
   @override
@@ -46,10 +56,12 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
-                decoration: InputDecoration(
+                controller: invoiceNumber,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "INVOICE NUMBER",
                 ),
@@ -58,7 +70,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
-                controller: _controller,
+                controller: invoiceDate,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "INVOICE DATE",
@@ -66,76 +78,84 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
               ),
             ),
             const Text("BILL TO : "),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
-                decoration: InputDecoration(
+                controller: billToName,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "NAME",
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
-                decoration: InputDecoration(
+                controller: billToAddress,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "STREET ADDRESS",
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
-                decoration: InputDecoration(
+                controller: billToCity,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "CITY/STATE/ZIP",
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
+                controller: billToPhone,
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "PHONE",
                 ),
               ),
             ),
             const Text("FROM : "),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
-                decoration: InputDecoration(
+                controller: fromName,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "NAME",
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
-                decoration: InputDecoration(
+                controller: fromAddress,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "STREET ADDRESS",
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
-                decoration: InputDecoration(
+                controller: fromCity,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "CITY/STATE/ZIP",
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
+                controller: fromPhone,
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "PHONE",
                 ),
@@ -145,10 +165,24 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
               padding: const EdgeInsets.all(25.0),
               child: InkWell(
                 onTap: () {
+                  InvoiceData invData = InvoiceData(
+                    invoiceNumber.text,
+                    billToAddress.text,
+                    billToCity.text,
+                    billToName.text,
+                    billToPhone.text,
+                    fromAddress.text,
+                    fromCity.text,
+                    fromName.text,
+                    fromPhone.text,
+                    invoiceDate.text,
+                    [],
+                  );
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const InvoiceItems()),
+                        builder: (context) => InvoiceItems(invData: invData)),
                   );
                 },
                 child: Container(
